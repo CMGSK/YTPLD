@@ -1,4 +1,5 @@
 import os
+import time
 
 try:
     from pytube import Playlist, YouTube
@@ -25,6 +26,7 @@ def download(pl, mp3, dir):
         yt = YouTube(link)
         vid = yt.streams.filter(only_audio=mp3).first()
         output = vid.download(output_path=dir)
+        time.sleep(0.2)
         if mp3:
             name, _ = os.path.splitext(output)
             os.rename(output, name + '.mp3')
