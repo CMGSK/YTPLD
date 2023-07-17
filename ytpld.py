@@ -26,10 +26,14 @@ def download(pl, mp3, dir):
         yt = YouTube(link)
         vid = yt.streams.filter(only_audio=mp3).first()
         output = vid.download(output_path=dir)
-        time.sleep(0.2)
         if mp3:
             name, _ = os.path.splitext(output)
-            os.rename(output, name + '.mp3')
+            try:
+                os.rename(output, name + '.mp3')
+            except: 
+                #this supposedly wont be used, try is only used to bypass some in cmd usage
+                #bug interaction between os.rename with YouTube.streams.download
+                os.rename(output, '01'+name+'.mp3')
         print('Downloaded: {0}/{1}'.format(str(i), str(cnt)))
         i += 1
     print('Your playlist has been downloaded.')
