@@ -4,8 +4,17 @@ import re
 
 try:
     from pytube import Playlist, YouTube
-except ModuleNotFoundError:
-    print('Please install pytube for the program to work.')
+except:
+    import pip
+    pip.main(['install', '--user', 'pytube'])
+finally:
+    try:
+        from pytube import Playlist, YouTube
+    except:
+        print('Please install pytube manually for the program to work.')
+        time.sleep(5)
+        quit()
+
 
 def get_urls(pl):
     urls = []
