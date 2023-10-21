@@ -43,7 +43,7 @@ def download(pl, mp3, dir):
             output = vid.download(output_path=dir)
             if mp3:
                 name, _ = os.path.splitext(output)
-                name = re.sub(r'/W+', '', name)
+                name = re.sub(r'[^a-zA-Z]+', '', name)
                 os.rename(output, name + '.mp3')
         except:
             print(f'Couldnt download {i + 1}')
