@@ -6,6 +6,7 @@ try:
     from pytube import Playlist, YouTube
 except:
     import pip
+
     pip.main(['install', '--user', 'pytube'])
 finally:
     try:
@@ -23,6 +24,13 @@ def get_urls(pl):
     return urls
 
 
+def manageRenameExceptions():
+    for name in os.listdir(os.getcwd()):
+        if '.mp4' in name:
+            if name[:-4] + '.mp3' in os.listdir(os.getcwd()):
+                os.remove(os.getcwd() + name)
+
+
 def download(pl, mp3, dir):
     forRetry = []
     if dir == '':
@@ -38,22 +46,25 @@ def download(pl, mp3, dir):
                 name = re.sub(r'/W+', '', name)
                 os.rename(output, name + '.mp3')
         except:
-            print(f'Couldnt download {i}')
+            print(f'Couldnt download {i + 1}')
             forRetry.append(link)
             continue
-        print(f'Downloaded: {i+1}/{str(len(pl))}')
+        print(f'Downloaded: {i + 1}/{str(len(pl))}')
     print('Your playlist has been downloaded.')
     if len(forRetry) > 0:
+        manageRenameExceptions()
+        print('The app has a slight chance of throw an error even tho the file has been downloaded successfuly \n'
+              'due to youtube encodings. In this case, downloads will keep throwing an error\n')
         print('Do you want to retry the failed downloads? Y/N')
         if str(input()).upper() == 'Y':
             download(forRetry, mp3, dir)
 
 
-print('YTPLD - Full YouTube playlist downloader')
-print('Please input the full YouTube playlist URL.')
-print('The default setting will download MP3, if you want the video, flag the URL like [URL] --Video')
-print('The default destination will be the local directory of this executable. '
-      'To choose your own location, flag the directory with [URL] --dir-[Desired directory]')
+print('YTPLD - Full YouTube playlist downloader\n\n'
+      'Please input the full YouTube playlist URL.\n'
+      'The default setting will download MP3, if you want the video, flag the URL like [URL] --video\n'
+      'The default destination will be the local directory of this executable.\n'
+      'To choose your own location, flag the directory with --dir [Desired directory]\n\n')
 
 user_input = input()
 splitter = user_input.split(' ')
